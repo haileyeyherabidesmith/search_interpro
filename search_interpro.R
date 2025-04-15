@@ -17,6 +17,7 @@ library(parallel)
 library(R6)
 library(rutils)
 
+
 build_local_interpro_cache <- function() {
   # This function builds a local cache of InterPro entries using the rutils package.
   # It fetches data from the InterPro API and stores it in a local directory for faster access.
@@ -69,11 +70,11 @@ search_local_cache <- function(query) {
       # ----- Check metadata$name fields -----
       if (!is.null(entry$metadata$name)) {
         if (!is.null(entry$metadata$name$name) &&
-            grepl(query, entry$metadata$name$name, ignore.case = TRUE)) {
+          grepl(query, entry$metadata$name$name, ignore.case = TRUE)) {
           match_found <- TRUE
         }
         if (!is.null(entry$metadata$name$short) &&
-            grepl(query, entry$metadata$name$short, ignore.case = TRUE)) {
+          grepl(query, entry$metadata$name$short, ignore.case = TRUE)) {
           match_found <- TRUE
         }
       }
@@ -111,4 +112,5 @@ search_local_cache <- function(query) {
 
 # Run the search for "nuclease" in metadata$name and metadata$description
 result <- search_local_cache(query = "nuclease")
-print(result)
+write_json(result, "nuclease_interpro_accessions.json", pretty = TRUE, auto_unbox = TRUE)
+log_info("Search completed. Results saved to 'nuclease_interpro_accessions.json'.")
